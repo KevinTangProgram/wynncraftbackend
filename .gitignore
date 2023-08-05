@@ -11,3 +11,4 @@
 #.pnp.*
 
 .env
+yarn.lock
