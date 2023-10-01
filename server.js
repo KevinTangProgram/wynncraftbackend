@@ -41,3 +41,18 @@ app.get('/get/friends', async (req, res) => {
     users.push(updates[0]);
     res.json(users);
 })
+
+app.post('/check', async (req, res) => {
+    let status = " online";
+    await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats")
+    .then((response) => {
+        if (!response.data.data[0].meta.location.online)
+        {
+            status = " offline";
+        }
+    })
+    .catch((error) => {
+        status = " error";
+    })
+    res.json(req.body.username + status);
+})
