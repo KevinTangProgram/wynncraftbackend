@@ -30,7 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["axios", "npm:1.5.1"],\
             ["cors", "npm:2.8.5"],\
-            ["crpyto-js", "npm:0.0.1-security"],\
+            ["crypto-js", "npm:4.1.1"],\
             ["dotenv", "npm:16.3.1"],\
             ["express", "npm:4.18.2"],\
             ["mongoose", "npm:7.5.3"]\
@@ -125,7 +125,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["backend", "workspace:."],\
             ["axios", "npm:1.5.1"],\
             ["cors", "npm:2.8.5"],\
-            ["crpyto-js", "npm:0.0.1-security"],\
+            ["crypto-js", "npm:4.1.1"],\
             ["dotenv", "npm:16.3.1"],\
             ["express", "npm:4.18.2"],\
             ["mongoose", "npm:7.5.3"]\
@@ -241,11 +241,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["crpyto-js", [\
-        ["npm:0.0.1-security", {\
-          "packageLocation": "./.yarn/cache/crpyto-js-npm-0.0.1-security-45059f45f0-8e89178bcb.zip/node_modules/crpyto-js/",\
+      ["crypto-js", [\
+        ["npm:4.1.1", {\
+          "packageLocation": "./.yarn/cache/crypto-js-npm-4.1.1-38a3b8c19d-b3747c12ee.zip/node_modules/crypto-js/",\
           "packageDependencies": [\
-            ["crpyto-js", "npm:0.0.1-security"]\
+            ["crypto-js", "npm:4.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
