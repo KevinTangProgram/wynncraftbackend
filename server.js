@@ -3,6 +3,7 @@ const cors = require('cors');
 const Dotenv = require("dotenv").config();
 const mongoose = require('mongoose');
 const axios = require('axios');
+const SHA256 = require("crypto-js/sha256");
 const connection = "mongodb+srv://kevintang01:" + process.env.M_PASSWORD + "@lahacks.gihcnf6.mongodb.net/"
 
 const connectDB = async () => {
@@ -44,7 +45,7 @@ app.get('/get/friends', async (req, res) => {
 
 app.post('/check', async (req, res) => {
     let status = " online";
-    await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats")
+    await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
     .then((response) => {
         if (!response.data.data[0].meta.location.online)
         {
