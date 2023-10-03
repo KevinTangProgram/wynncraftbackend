@@ -4,7 +4,7 @@ const Dotenv = require("dotenv").config();
 const mongoose = require('mongoose');
 const SHA256 = require("crypto-js/sha256");
 const axios = require('axios');
-const connection = "mongodb+srv://kevintang01:" + process.env.M_PASSWORD + "@lahacks.gihcnf6.mongodb.net/"
+const connection = "mongodb+srv://kevintangdbio:" + process.env.M_PASSWORD + "@wynncraft.draoxqj.mongodb.net/"
 
 const connectDB = async () => {
     mongoose.set('strictQuery', false);
@@ -29,16 +29,37 @@ connectDB().then(() => {
 
 const Users = require("./models/users");
 const Updates = require("./models/updates");
-
-const dangerList = ['Salted', 'Grian', 'Jumla', 'Crunkle', 'HeyZeer0', 'Nepmia', 'Naraka00', 'Viridian', '____________birb', '_purplegiraffe_', 'Aerrihn', 'AmbassadorDazz', 'BTK2000', 'Chigo_', 'ditsario', 'Fiery_Mystery', 'Ichikaaa', 'ItzAzura', 'Lysmod', 'Julinho', 'Magicmakerman', 'MigatteNoGokuii', 'MilkeeW', 'PraetorianWolf', 'ShadowShift', 'Slime1480'];
+const Month = require("./models/month");
+const All = require("./models/all");
 
 app.get('/startup', async (req, res) => {
     res.json(0);
 })
 
+app.get('/get/all', async (req, res) => {
+    const users = await Users.find({}, {_id: 0});
+    const updates = await Updates.find({}, {_id: 0, update: 1});
+    let returnArray = [];
+    for (let i = 0; i < users.length; i++)
+    {
+        usersMonth = await Month.find({user: users[i].user}, {_id: 0});
+        usersAll = await All.find({user: users[i].user}, {_id: 0});
+        returnArray.push({
+            user: users[i].user,
+            month: usersMonth[0].month,
+            creation: usersMonth[0].creation,
+            deletion: usersMonth[0].deletion,
+            all: usersAll[0].all
+        });
+    }
+    returnArray.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
+    res.json(returnArray);
+})
+
 app.get('/get/friends', async (req, res) => {
     const users = await Users.find({}, {_id: 0});
     const updates = await Updates.find({}, {_id: 0, update: 1});
+    users.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
     users.push(updates[0]);
     res.json(users);
 })
