@@ -68,16 +68,28 @@ app.get('/get/friends', async (req, res) => {
 })
 
 app.post('/check', async (req, res) => {
-    let status = " online";
-    await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
-    .then((response) => {
-        if (!response.data.data[0].meta.location.online)
-        {
-            status = " offline";
-        }
-    })
-    .catch((error) => {
-        status = " error";
-    })
+    let status = " error";
+    try
+    {
+        await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+        .then((response) => {
+            if (!response.data.data[0].meta.location.online)
+            {
+                status = " offline";
+            }
+            else
+            {
+                status = ' ' + response.data.data[0].meta.location.server
+            }
+        })
+        .catch((error) => {
+            status = " server error";
+            console.log(error);
+        })
+    }
+    catch (error)
+    {
+        status = " failed error";
+    }
     res.json(req.body.username + status);
 })
