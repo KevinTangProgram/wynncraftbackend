@@ -46,6 +46,8 @@ app.get('/get/all', async (req, res) => {
         usersAll = await All.find({user: users[i].user}, {_id: 0});
         returnArray.push({
             user: users[i].user,
+            today: users[i].today,
+            world: users[i].world,
             month: usersMonth[0].month,
             creation: usersMonth[0].creation,
             deletion: usersMonth[0].deletion,
@@ -53,6 +55,7 @@ app.get('/get/all', async (req, res) => {
         });
     }
     returnArray.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
+    returnArray.push(updates[0]);
     res.json(returnArray);
 })
 
