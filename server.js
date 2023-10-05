@@ -80,6 +80,17 @@ app.post('/check', async (req, res) => {
             else
             {
                 status = ' ' + response.data.data[0].meta.location.server
+                axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats")
+                .then((response) => {
+                    if (response.data.data[0].meta.location.online)
+                    {
+                        status += " vanished";
+                    }
+                })
+                .catch((error) => {
+                    status += " server error";
+                    console.log(error);
+                })
             }
         })
         .catch((error) => {
