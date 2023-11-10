@@ -6,7 +6,7 @@ const SHA256 = require("crypto-js/sha256");
 const axios = require('axios');
 const connection = "mongodb+srv://kevintangdbio:" + process.env.M_PASSWORD + "@wynncraft.draoxqj.mongodb.net/"
 
-let exceptions = ["ditsario", "Moe_block", "Zinnig", "Grian"]
+let exceptions = ["Zyreon", "Awesome_AA_", "Awesome_AA", "SemiColonD", "azarashiouo"]
 
 const connectDB = async () => {
     mongoose.set('strictQuery', false);
@@ -41,10 +41,11 @@ app.get('/startup', async (req, res) => {
 app.get('/get/all', async (req, res) => {
     const users = await Users.find({}, {_id: 0});
     const updates = await Updates.find({}, {_id: 0, update: 1});
+    const dangerList = JSON.stringify(await Updates.find({}, {_id: 0, danger: 1}));
     let returnArray = [];
     for (let i = 0; i < users.length; i++)
     {
-        if (!exceptions.includes(users[i].user))
+        if (dangerList.includes('|' + users[i].user + '|') || exceptions.includes(users[i].user))
         {
             usersMonth = await Month.find({user: users[i].user}, {_id: 0});
             usersAll = await All.find({user: users[i].user}, {_id: 0});
@@ -67,9 +68,10 @@ app.get('/get/all', async (req, res) => {
 app.get('/get/friends', async (req, res) => {
     const users = await Users.find({}, {_id: 0});
     const updates = await Updates.find({}, {_id: 0, update: 1});
+    const dangerList = JSON.stringify(await Updates.find({}, {_id: 0, danger: 1}));
     for (let i = 0; i < users.length; i++)
     {
-        if (exceptions.includes(users[i].user))
+        if (dangerList.includes('|$#!%' + users[i].user + '|') && !exceptions.includes(users[i].user))
         {
             users.splice(i, 1);
             i--;
