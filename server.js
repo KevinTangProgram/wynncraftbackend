@@ -88,61 +88,46 @@ app.post('/check', async (req, res) => {
     {
         if (req.body.on === 0)
         {
-            const hashList = ["", "?hash=" + SHA256(Date.now().toString() + "sniperjake1994").toString()]
-            const urls = hashList.map((hashElement) => axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats" + hashElement, {
-                timeout: 5000,
-            }));
-            await axios.all(urls)
-            .then((responses) => {
-                if (responses[1].data.data[0].meta.location.online)
+            await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+            .then((response) => {
+                if (response.data.data[0].meta.location.online)
                 {
-                    status = ' ' + responses[1].data.data[0].meta.location.server;
+                    status = ' ' + response.data.data[0].meta.location.server;
                 }
                 else
                 {
                     status = " offline";
                 }
-                if (!responses[0].data.data[0].meta.location.online && status !== " error" && status !== " offline")
-                {
-                    status += " vanished";
-                }
             })
             .catch((error) => {
-                status = " large server error";
+                status = " server error";
             })
         }
         else
         {
             await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
-            .then(async (response) => {
-                if (!response.data.data[0].meta.location.online)
+            .then((response) => {
+                if (response.data.data[0].meta.location.online)
                 {
-                    status = " offline";
+                    status = ' ' + response.data.data[0].meta.location.server;
                 }
                 else
                 {
-                    status = ' ' + response.data.data[0].meta.location.server;
+                    const lastSeen = new Date(response.data.data[0].meta.lastJoin).getTime();
+                    if (Date.now() - lastSeen < 60000)
+                    {
+                        status = " vanished";
+                    }
+                    else
+                    {
+                        status = " offline";
+                    }
                 }
             })
             .catch((error) => {
                 status = " server error";
                 console.log(error);
             })
-            if (status !== " error" && status !== " server error" && status !== " offline")
-            {
-                await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats")
-                .then((response) => {
-                    //console.log(response.data.data[0].meta.location.online)
-                    if (!response.data.data[0].meta.location.online)
-                    {
-                        status += " vanished";
-                    }
-                })
-                .catch((error) => {
-                    status += " server error";
-                    console.log(error);
-                })
-            }
         }
         
         
