@@ -96,7 +96,14 @@ app.post('/check', async (req, res) => {
                 }
                 else
                 {
-                    status = " offline";
+                    if (req.body.username === "Salted")
+                    {
+                        status = " WC0"
+                    }
+                    else
+                    {
+                        status = " offline";
+                    }
                 }
             })
             .catch((error) => {
