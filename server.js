@@ -86,58 +86,28 @@ app.post('/check', async (req, res) => {
     let status = " error";
     try
     {
-        if (req.body.on === 0)
-        {
-            await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
-            .then((response) => {
-                if (response.data.data[0].meta.location.online)
+        await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+        .then((response) => {
+            if (response.data.data[0].meta.location.online)
+            {
+                status = ' ' + response.data.data[0].meta.location.server;
+            }
+            else
+            {
+                const lastSeen = new Date(response.data.data[0].meta.lastJoin).getTime();
+                if (Date.now() - lastSeen < 60000)
                 {
-                    status = ' ' + response.data.data[0].meta.location.server;
+                    status = " vanished";
                 }
                 else
                 {
-                    if (req.body.username === "Salted")
-                    {
-                        status = " WC0"
-                    }
-                    else
-                    {
-                        status = " offline";
-                    }
+                    status = " offline";
                 }
-            })
-            .catch((error) => {
-                status = " server error";
-            })
-        }
-        else
-        {
-            await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
-            .then((response) => {
-                if (response.data.data[0].meta.location.online)
-                {
-                    status = ' ' + response.data.data[0].meta.location.server;
-                }
-                else
-                {
-                    const lastSeen = new Date(response.data.data[0].meta.lastJoin).getTime();
-                    if (Date.now() - lastSeen < 60000)
-                    {
-                        status = " vanished";
-                    }
-                    else
-                    {
-                        status = " offline";
-                    }
-                }
-            })
-            .catch((error) => {
-                status = " server error";
-                console.log(error);
-            })
-        }
-        
-        
+            }
+        })
+        .catch((error) => {
+            status = " server error";
+        })
     }
     catch (error)
     {
