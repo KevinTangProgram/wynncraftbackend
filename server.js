@@ -51,36 +51,18 @@ app.get('/get/all', async (req, res) => {
         {
             usersMonth = await Month.find({user: users[i].user}, {_id: 0});
             usersAll = await All.find({user: users[i].user}, {_id: 0});
-            if (dangerList.includes('|' + users[i].user + '|'))
-            {
-                returnArray2.push({
-                    user: users[i].user,
-                    today: users[i].today,
-                    world: users[i].world,
-                    month: usersMonth[0].month,
-                    creation: usersMonth[0].creation,
-                    deletion: usersMonth[0].deletion,
-                    all: usersAll[0].all
-                });
-            }
-            else
-            {
-                returnArray.push({
-                    user: users[i].user,
-                    today: users[i].today,
-                    world: users[i].world,
-                    month: usersMonth[0].month,
-                    creation: usersMonth[0].creation,
-                    deletion: usersMonth[0].deletion,
-                    all: usersAll[0].all
-                });
-            
-            }
+            returnArray.push({
+                user: users[i].user,
+                today: users[i].today,
+                world: users[i].world,
+                month: usersMonth[0].month,
+                creation: usersMonth[0].creation,
+                deletion: usersMonth[0].deletion,
+                all: usersAll[0].all
+            });
         }
     }
     returnArray.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
-    returnArray2.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
-    returnArray = returnArray.concat(returnArray2);
     returnArray.push(updates[0]);
     res.json(returnArray);
 })
