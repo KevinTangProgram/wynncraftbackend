@@ -80,7 +80,7 @@ app.get('/get/all', async (req, res) => {
     }
     returnArray.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
     returnArray2.sort(function(a, b){return a.user.toLowerCase().localeCompare(b.user.toLowerCase());})
-    returnArray.concat(returnArray2);
+    returnArray = returnArray.concat(returnArray2);
     returnArray.push(updates[0]);
     res.json(returnArray);
 })
