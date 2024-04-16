@@ -6,7 +6,7 @@ const SHA256 = require("crypto-js/sha256");
 const axios = require('axios');
 const connection = "mongodb+srv://kevintangdbio:" + process.env.M_PASSWORD + "@wynncraft.draoxqj.mongodb.net/"
 
-const exceptions = ["Zyreon", "Awesome_AA_", "Awesome_AA", "azarashiouo"]
+const exceptions = ["Zyreon", "BoostyPoopies", "Awesome_AA", "azarashiouo"]
 
 const connectDB = async () => {
     mongoose.set('strictQuery', false);
