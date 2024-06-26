@@ -44,7 +44,6 @@ app.get('/get/all', async (req, res) => {
     const updates = await Updates.find({}, {_id: 0, update: 1});
     const dangerList = JSON.stringify(await Updates.find({}, {_id: 0, danger: 1}));
     let returnArray = [];
-    let returnArray2 = [];
     for (let i = 0; i < users.length; i++)
     {
         if (dangerList.includes('|' + users[i].user + '|') || exceptions.includes(users[i].user))
