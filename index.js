@@ -87,15 +87,37 @@ app.post('/check', async (req, res) => {
     let status = " error";
     try
     {
-        await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+        // await axios.get("https://api.wynncraft.com/v2/player/" + req.body.username + "/stats?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+        // .then((response) => {
+        //     if (response.data.data[0].meta.location.online)
+        //     {
+        //         status = ' ' + response.data.data[0].meta.location.server;
+        //     }
+        //     else
+        //     {
+        //         const lastSeen = new Date(response.data.data[0].meta.lastJoin).getTime();
+        //         if (Date.now() - lastSeen < 60000)
+        //         {
+        //             status = " vanished";
+        //         }
+        //         else
+        //         {
+        //             status = " offline";
+        //         }
+        //     }
+        // })
+        // .catch((error) => {
+        //     status = " server error";
+        // })
+        await axios.get("https://beta-api.wynncraft.com/v3/player/" + req.body.username + "?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
         .then((response) => {
-            if (response.data.data[0].meta.location.online)
+            if (response.data.online)
             {
-                status = ' ' + response.data.data[0].meta.location.server;
+                status = ' ' + response.data.server;
             }
             else
             {
-                const lastSeen = new Date(response.data.data[0].meta.lastJoin).getTime();
+                const lastSeen = new Date(response.data.lastJoin).getTime();
                 if (Date.now() - lastSeen < 60000)
                 {
                     status = " vanished";
