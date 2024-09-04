@@ -109,7 +109,7 @@ app.post('/check', async (req, res) => {
         // .catch((error) => {
         //     status = " server error";
         // })
-        await axios.get("https://beta-api.wynncraft.com/v3/player/" + req.body.username + "?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
+        await axios.get("https://api.wynncraft.com/v3/player/" + req.body.username + "?hash=" + SHA256(Date.now().toString() + process.env.HASH_KEY).toString())
         .then((response) => {
             if (response.data.online)
             {
